@@ -1,23 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import ItemList from './components/itemsList';
+import * as MUI from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import AddItem from './components/addItem';
 
-function App() {
+const useStyles = makeStyles({
+  body:{
+    width:'auto',
+    height:768
+  },
+  container:{
+    background:'linear-gradient(75deg, limegreen 5%, palevioletred 90%)',
+    borderRadius:8,
+    minHeight:500,
+  },
+  font:{
+    fontFamily:'Roboto',
+    display:'flex',
+    justifyContent:'center',
+    padding:10
+  }
+});
+
+const  App = () => {
+  const classes = useStyles();
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className={classes.body}>
+      <MUI.Container className={classes.container} maxWidth="sm">
+        <h3 className={classes.font} >TodoList App</h3>
+        <AddItem/>
+        <ItemList/>
+      </MUI.Container>
     </div>
   );
 }
