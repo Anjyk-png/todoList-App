@@ -16,9 +16,8 @@ const useStyles = makeStyles({
 });
 
 const ItemList = ({todos}) => {
-
+    console.log(todos);
     const classes = useStyles();
-    console.log(todos)
     return (
        <div >
           <div className={classes.main}>
@@ -27,12 +26,14 @@ const ItemList = ({todos}) => {
           </div>
             {
                 todos.map(({label, id, checked}) => {
-                    return <Item key={Math.floor(Math.random() * 1000)} label={label} id={id} checked={checked}/>
+                    return  <Item key={Math.floor(Math.random() * 10000)} label={label} id={id} checked={checked}/>
                 })
             }
        </div>
     )
 };
+
+
 
 const mapStateToProps = (state) => {
     return {

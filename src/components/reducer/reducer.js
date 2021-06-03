@@ -7,6 +7,31 @@ const initialState = [
 
 const reducer = (state = initialState, action) => {
     switch(action.type) {
+        case 'CHANGE_CHECK':
+            let changedState = [...state];
+            let changedTodo = null;
+            state.forEach((todo) => {
+                if (todo.id === action.id) {
+                    changedTodo = {...todo,checked:!todo.checked}
+                    changedState[todo.id - 1] = changedTodo;
+                }
+            });
+            return [...changedState];
+        case 'DELETE_TODO':
+            let State = [...state];
+            let id = null;
+            let newId = 0
+            state.forEach((todo) => {
+                if (todo.id === action.id) {
+                    id = todo.id 
+                }
+            });
+            let stateWithDeletedTodo = State.filter(todo => todo.id !== id);
+            stateWithDeletedTodo.forEach(todo => {
+               newId++;
+               todo.id = newId;
+            })
+            return [...stateWithDeletedTodo];
         default:
             return state;
     }

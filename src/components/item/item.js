@@ -4,7 +4,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import Fab from '@material-ui/core/Fab';
-
+import {changeCheck, deleteTodo} from '../actions';
+import {connect} from 'react-redux';
 
 const useStyles = makeStyles({
     editIcon:{
@@ -22,14 +23,14 @@ const useStyles = makeStyles({
     }
 });
 
-const Item = ({label, checked, id}) => {
+const Item = ({label, checked, id, changeCheck, deleteTodo}) => {
     const classes = useStyles();
     return (
         <>
             <div>
-                <MUI.Checkbox color="primary" checked={checked}/>
+                <MUI.Checkbox onClick={() => changeCheck(id)} color="primary" checked={checked}/>
                 <MUI.Chip className={classes.main} color="primary" label={`${id}.${label}`}/>
-                <MUI.IconButton aria-label="delete">
+                <MUI.IconButton onClick={() => deleteTodo(id)} aria-label="delete">
                     <DeleteIcon fontSize="small" color='secondary' />
                 </MUI.IconButton>
                 <Fab size="small" className={classes.editIcon} color="default" aria-label="edit">
@@ -40,6 +41,13 @@ const Item = ({label, checked, id}) => {
     )
 };
 
-export default Item;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        changeCheck: (id) => dispatch(changeCheck(id)),
+        deleteTodo: (id) => dispatch(deleteTodo(id))
+    }
+};
+
+export default connect(null, mapDispatchToProps)(Item);
 
 
