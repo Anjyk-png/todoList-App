@@ -37,6 +37,6 @@ const AddItem = () => {
             </Fab>
         </div>
     )
-}
+};
 
 export default AddItem;

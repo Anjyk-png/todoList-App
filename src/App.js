@@ -10,7 +10,7 @@ const useStyles = makeStyles({
     height:768
   },
   container:{
-    background:'linear-gradient(75deg, limegreen 5%, palevioletred 90%)',
+    background:'linear-gradient(75deg, white 20%, red 100%)',
     borderRadius:8,
     minHeight:500,
   },
@@ -33,6 +33,6 @@ const  App = () => {
       </MUI.Container>
     </div>
   );
-}
+};
 
 export default App;
