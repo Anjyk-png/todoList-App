@@ -28,8 +28,8 @@ const Item = ({label, checked, id, changeCheck, deleteTodo}) => {
     return (
         <>
             <div>
-                <MUI.Checkbox onClick={() => changeCheck(id)} color="primary" checked={checked}/>
-                <MUI.Chip className={classes.main} color="primary" label={`${id}.${label}`}/>
+                <MUI.Checkbox onClick={() => changeCheck(id)} color="secondary" checked={checked}/>
+                <MUI.Chip className={classes.main} color="primary" label={label}/>
                 <MUI.IconButton onClick={() => deleteTodo(id)} aria-label="delete">
                     <DeleteIcon fontSize="small" color='secondary' />
                 </MUI.IconButton>

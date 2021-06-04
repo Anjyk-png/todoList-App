@@ -1,5 +1,6 @@
-import {changeCheck,deleteTodo} from './actions';
+import {changeCheck, deleteTodo, addTodo} from './actions';
 export {
     changeCheck,
-    deleteTodo
+    deleteTodo,
+    addTodo
 }
