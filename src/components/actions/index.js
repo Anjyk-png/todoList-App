@@ -1,6 +1,8 @@
-import {changeCheck, deleteTodo, addTodo} from './actions';
+import {changeCheck, deleteTodo, addTodo, changeIsEdit, editTodo} from './actions';
 export {
     changeCheck,
     deleteTodo,
-    addTodo
+    addTodo,
+    changeIsEdit,
+    editTodo
 }

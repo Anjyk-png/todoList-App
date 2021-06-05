@@ -10,7 +10,7 @@ const useStyles = makeStyles({
     height:768
   },
   container:{
-    background:'linear-gradient(75deg, white 20%, red 100%)',
+    background:'linear-gradient(75deg, orange 20%, limegreen 100%)',
     borderRadius:8,
     minHeight:500,
   },

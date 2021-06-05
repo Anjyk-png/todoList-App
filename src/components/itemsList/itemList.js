@@ -19,27 +19,46 @@ const useStyles = makeStyles({
     },
     active:{
         backgroundColor:'#f50057'
+    },
+    h3:{
+        display:'flex',
+        justifyContent:'center',
+        fontFamily:'Roboto'
     }
 });
 
 const ItemList = ({todos}) => {
     const [activeBtn,setBtn] = useState(true);
     const classes = useStyles();
-    console.log(todos)
-    const allTodos = (
-        todos.map(({label, id, checked}) => {
+    let checkedTodos = [];
+    let noDoneTodos = [];
+    let notDoneTodos = (
+        todos.map(({label, id, checked, isEdit}) => {
             if(!checked) {
-                return  <Item key={Math.floor(Math.random() * 10000)} label={label} id={id} checked={checked}/>
+                noDoneTodos.push(1);
+                return  <Item
+                key={Math.floor(Math.random() * 10000)} 
+                label={label} 
+                id={id} 
+                checked={checked}
+                isEdit={isEdit}/>
             }
         })
     );
-    const executedTodos = (
+    if(!noDoneTodos.length) {
+        notDoneTodos = (<h3 className={classes.h3}>No todos here</h3>);
+    }
+    let executedTodos = (
         todos.map(({label, id, checked}) => {
             if(checked) {
+                checkedTodos.push(1);
                 return  <Item key={Math.floor(Math.random() * 10000)} label={label} id={id} checked={checked}/>
             }
         })
     );
+    if(!checkedTodos.length) {
+        executedTodos = (<h3 className={classes.h3}>No todos here</h3>);
+    }
     return (
        <div >
           <div className={classes.main}>
@@ -49,7 +68,7 @@ const ItemList = ({todos}) => {
                 <Button onClick={() => setBtn(false)} className={activeBtn ? '' : classes.active}>done</Button>
             </ButtonGroup>
           </div>
-            {activeBtn ? allTodos : executedTodos}
+            {activeBtn ? notDoneTodos : executedTodos}
        </div>
     )
 };
