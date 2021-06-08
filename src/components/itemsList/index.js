@@ -1,2 +1,2 @@
-import ItemList from './itemList';
+import ItemList from "./ItemList.jsx";
 export default ItemList;
