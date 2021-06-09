@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Button from "@material-ui/core/Button";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 import Item from "../Item";
 
@@ -32,37 +32,24 @@ const useStyles = makeStyles({
 const ItemList = ({ todos }) => {
   const [activeBtn, setBtn] = useState(true);
   const classes = useStyles();
-  let notDoneTodos = todos.map(({ label, id, checked, isEdit }) => {
-    if (!checked) {
-      return (
-        <Item
-          key={Math.floor(Math.random() * 10000)}
-          label={label}
-          id={id}
-          checked={checked}
-          isEdit={isEdit}
-        />
-      );
-    }
-  });
-  if (notDoneTodos.every((todo) => typeof todo === "undefined")) {
-    notDoneTodos = <h3 className={classes.h3}>No todos here</h3>;
+  let newTodos = [];
+  if (activeBtn) {
+    newTodos = todos.filter((todo) => !todo.checked);
+  } else {
+    newTodos = todos.filter((todo) => todo.checked);
   }
-  let executedTodos = todos.map(({ label, id, checked }) => {
-    if (checked) {
-      return (
-        <Item
-          key={Math.floor(Math.random() * 10000)}
-          label={label}
-          id={id}
-          checked={checked}
-        />
-      );
-    }
+  const activeTodos = newTodos.map(({ label, id, checked, isEdit }) => {
+    return (
+      <Item
+        key={Math.floor(Math.random() * 10000)}
+        label={label}
+        id={id}
+        checked={checked}
+        isEdit={isEdit}
+      />
+    );
   });
-  if (executedTodos.every((todo) => typeof todo === "undefined")) {
-    executedTodos = <h3 className={classes.h3}>No todos here</h3>;
-  }
+
   return (
     <div>
       <div className={classes.main}>
@@ -86,7 +73,7 @@ const ItemList = ({ todos }) => {
           </Button>
         </ButtonGroup>
       </div>
-      {activeBtn ? notDoneTodos : executedTodos}
+      {activeTodos}
     </div>
   );
 };
