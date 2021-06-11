@@ -4,8 +4,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import AddIcon from "@material-ui/icons/Add";
 import Fab from "@material-ui/core/Fab";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
+import Context from "../../context";
 import { addTodo } from "../../actions";
 
 const useStyles = makeStyles((theme) => ({
@@ -32,26 +33,36 @@ const AddItem = ({ addTodo }) => {
     setValue("");
   }
   return (
-    <div className={classes.main}>
-      <form
-        onSubmit={(e) => onClickOrSubmitForm(e)}
-        className={classes.root}
-        noValidate
-        autoComplete="off"
-      >
-        <TextField
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          id="outlined-secondary"
-          label="Write todos here"
-          variant="outlined"
-          color="secondary"
-        />
-      </form>
-      <Fab size="small" color="primary" aria-label="add">
-        <AddIcon onClick={(e) => onClickOrSubmitForm(e)} />
-      </Fab>
-    </div>
+    <Context.Consumer>
+      {(switchValue) => {
+        return (
+          <div className={classes.main}>
+            <form
+              onSubmit={(e) => onClickOrSubmitForm(e)}
+              className={classes.root}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+                id="outlined-secondary"
+                label="Write todos here"
+                variant="outlined"
+                color="secondary"
+              />
+            </form>
+            <Fab
+              size="small"
+              color={switchValue ? "secondary" : "primary"}
+              aria-label="add"
+            >
+              <AddIcon onClick={(e) => onClickOrSubmitForm(e)} />
+            </Fab>
+          </div>
+        );
+      }}
+    </Context.Consumer>
   );
 };
 

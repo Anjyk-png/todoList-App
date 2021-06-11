@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import * as MUI from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import Switch from "@material-ui/core/Switch";
 
+import MainContext from "./context";
 import ItemList from "./components/ItemsList";
 import AddItem from "./components/AddItem";
 
@@ -10,8 +12,13 @@ const useStyles = makeStyles({
     width: "auto",
     height: 768,
   },
-  container: {
-    background: "linear-gradient(75deg, orange 20%, limegreen 100%)",
+  containerSwitchFalse: {
+    background: "gainsboro",
+    borderRadius: 8,
+    minHeight: 500,
+  },
+  containerSwitchTrue: {
+    background: "darkslategray",
     borderRadius: 8,
     minHeight: 500,
   },
@@ -19,20 +26,56 @@ const useStyles = makeStyles({
     fontFamily: "Roboto",
     display: "flex",
     justifyContent: "center",
-    padding: 10,
+    paddingBottom: 10,
+    margin: 0,
+  },
+  switch: {
+    display: "flex",
+    justifyContent: "start",
+    alignItems: "center",
+    fontFamily: "Roboto",
+    padding: 0,
+    margin: 0,
   },
 });
 
 const App = () => {
+  const [checked, setChecked] = useState(false);
+  const handleChange = () => {
+    setChecked(!checked);
+  };
   const classes = useStyles();
   return (
-    <div className={classes.body}>
-      <MUI.Container className={classes.container} maxWidth="sm">
-        <h3 className={classes.font}>TodoList App</h3>
-        <AddItem />
-        <ItemList />
-      </MUI.Container>
-    </div>
+    <MainContext.Provider value={checked}>
+      <div className={classes.body}>
+        <MUI.Container
+          className={
+            checked ? classes.containerSwitchFalse : classes.containerSwitchTrue
+          }
+          maxWidth="sm"
+        >
+          <div className={classes.switch}>
+            <Switch
+              checked={checked}
+              onChange={handleChange}
+              name="checkedA"
+              inputProps={{ "aria-label": "secondary checkbox" }}
+            />
+            <h5 style={checked ? { color: "black" } : { color: "white" }}>
+              change theme
+            </h5>
+          </div>
+          <h3
+            className={classes.font}
+            style={checked ? { color: "black" } : { color: "white" }}
+          >
+            TodoList App
+          </h3>
+          <AddItem />
+          <ItemList />
+        </MUI.Container>
+      </div>
+    </MainContext.Provider>
   );
 };
 

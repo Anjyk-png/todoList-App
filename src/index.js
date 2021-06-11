@@ -6,7 +6,6 @@ import { createStore } from "redux";
 import reducer from "./reducers";
 import App from "./App.jsx";
 
-
 const store = createStore(reducer);
 
 render(
