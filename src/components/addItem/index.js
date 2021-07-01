@@ -1,2 +1,2 @@
-import AddItem from "./AddItem.jsx";
+import AddItem from "./AddItem";
 export default AddItem;

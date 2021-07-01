@@ -1,3 +1,3 @@
-import { MainContext } from "./mainContext";
+import { MainContext } from "./mainContext.ts";
 
 export default MainContext;

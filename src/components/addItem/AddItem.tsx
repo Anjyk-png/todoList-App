@@ -1,15 +1,15 @@
-import React, { useState } from "react";
+import React,
+ { Dispatch, FormEvent, ChangeEvent, MouseEvent, useState, FunctionComponent } from "react";
 import { connect } from "react-redux";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, Theme } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import AddIcon from "@material-ui/icons/Add";
 import Fab from "@material-ui/core/Fab";
-import PropTypes from "prop-types";
 
-import Context from "../../context";
+import Context from "../../context/index";
 import { addTodo } from "../../actions";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
   root: {
     "& > *": {
       margin: theme.spacing(1),
@@ -24,28 +24,40 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AddItem = ({ addTodo }) => {
-  const [value, setValue] = useState("");
-  const classes = useStyles();
-  function onClickOrSubmitForm(e) {
+type AddTodoActionType = {
+  type: "ADD_TODO";
+  label: string;
+};
+
+type addTodoType = {
+  addTodo: (label: string) => AddTodoActionType;
+};
+
+const AddItem: FunctionComponent<addTodoType> = ({ addTodo }) => {
+  const [value, setValue] = useState<string>("");
+  const classes: any = useStyles();
+  function onClickOrSubmitForm(e: MouseEvent | FormEvent): void {
     e.preventDefault();
     addTodo(value);
     setValue("");
   }
+
   return (
     <Context.Consumer>
-      {(switchValue) => {
+      {(switchValue: boolean) => {
         return (
           <div className={classes.main}>
             <form
-              onSubmit={(e) => onClickOrSubmitForm(e)}
+              onSubmit={(e: FormEvent): void => onClickOrSubmitForm(e)}
               className={classes.root}
               noValidate
               autoComplete="off"
             >
               <TextField
                 value={value}
-                onChange={(e) => setValue(e.target.value)}
+                onChange={(e: ChangeEvent<HTMLInputElement>): void =>
+                  setValue(e.target.value)
+                }
                 id="outlined-secondary"
                 label="Write todos here"
                 variant="outlined"
@@ -57,7 +69,9 @@ const AddItem = ({ addTodo }) => {
               color={switchValue ? "secondary" : "primary"}
               aria-label="add"
             >
-              <AddIcon onClick={(e) => onClickOrSubmitForm(e)} />
+              <AddIcon
+                onClick={(e: MouseEvent): void => onClickOrSubmitForm(e)}
+              />
             </Fab>
           </div>
         );
@@ -66,13 +80,9 @@ const AddItem = ({ addTodo }) => {
   );
 };
 
-AddItem.propTypes = {
-  addTodo: PropTypes.func,
-};
-
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch: Dispatch<any>) => {
   return {
-    addTodo: (value) => dispatch(addTodo(value)),
+    addTodo: (value: string): any => dispatch(addTodo(value)),
   };
 };
 

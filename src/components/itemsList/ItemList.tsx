@@ -1,11 +1,10 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, FC } from "react";
 import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Button from "@material-ui/core/Button";
-import PropTypes from "prop-types";
 
-import Context from "../../context";
+import Context from "../../context/index";
 import Item from "../Item";
 
 const useStyles = makeStyles({
@@ -31,23 +30,34 @@ const useStyles = makeStyles({
   },
 });
 
-const ItemList = ({ todos }) => {
-  const [activeBtn, setBtn] = useState(true);
-  const classes = useStyles();
-  let i = 0;
-  let newTodos = [];
+interface ITodo {
+  id: number;
+  label: string;
+  checked: boolean;
+  isEdit: boolean;
+}
 
-  let checkedTodos = useMemo(
-    () => todos.filter(({ checked }) => checked === false),
+interface ITodos {
+  todos: ITodo[];
+}
+
+const ItemList: FC<ITodos> = ({ todos }) => {
+  const [activeBtn, setBtn] = useState<boolean>(true);
+  const classes: any = useStyles();
+  let i: number = 0;
+  let newTodos: JSX.Element[] = [];
+
+  let checkedTodos: ITodo[] = useMemo(
+    () => todos.filter(({ checked }: any) => checked === false),
     [todos]
   );
-  let unCheckedTodos = useMemo(
-    () => todos.filter(({ checked }) => checked === true),
+  let unCheckedTodos: ITodo[] = useMemo(
+    () => todos.filter(({ checked }: any) => checked === true),
     [todos]
   );
 
   newTodos = (activeBtn ? checkedTodos : unCheckedTodos).map(
-    ({ label, id, checked, isEdit }) => {
+    ({ label, id, checked, isEdit }: ITodo) => {
       i++;
       return (
         <Item
@@ -64,7 +74,7 @@ const ItemList = ({ todos }) => {
 
   return (
     <Context.Consumer>
-      {(switchValue) => {
+      {(switchValue: boolean) => {
         return (
           <div>
             <div className={classes.main}>
@@ -111,11 +121,7 @@ const ItemList = ({ todos }) => {
   );
 };
 
-ItemList.propTypes = {
-  todos: PropTypes.array,
-};
-
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: Array<ITodo>) => {
   return {
     todos: state,
   };

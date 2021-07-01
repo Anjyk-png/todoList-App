@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, Dispatch, FC, ChangeEvent, FormEvent } from "react";
 import { connect } from "react-redux";
 import TextField from "@material-ui/core/TextField";
 import * as MUI from "@material-ui/core";
@@ -6,9 +6,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import Fab from "@material-ui/core/Fab";
-import PropTypes from "prop-types";
 
-import MainContext from "../../context";
+import MainContext from "../../context/index";
 import { changeCheck, deleteTodo, changeIsEdit, editTodo } from "../../actions";
 
 const useStyles = makeStyles({
@@ -37,25 +36,68 @@ const useStyles = makeStyles({
   },
 });
 
-const Item = ({ label, checked, id, isEdit, changeCheck, deleteTodo, changeIsEdit, editTodo, indexNumber }) => {
-  const [value, setValue] = useState(label);
-  function onClickOrSubmitForm(e) {
+type DeleteTodoActionType = {
+  type: "DELETE_TODO";
+  id: number;
+};
+
+type ChangeIsEditActionType = {
+  type: "CHANGE_IS_EDIT";
+  id: number;
+};
+
+type EditTodoActionType = {
+  type: "EDIT_TODO";
+  label: string;
+  id: number;
+};
+
+type ChangeCheckActionType = {
+  type: "CHANGE_CHECK";
+  id: number;
+};
+
+interface Iitem {
+  label: string;
+  checked: boolean;
+  id: number;
+  isEdit: boolean;
+  indexNumber: number;
+  changeCheck: (id: number) => ChangeCheckActionType;
+  deleteTodo: (id: number) => DeleteTodoActionType;
+  changeIsEdit: (id: number) => ChangeIsEditActionType;
+  editTodo: (label: string, id: number) => EditTodoActionType;
+}
+
+const Item: FC<Iitem> = (
+    { label, checked, id, isEdit, changeCheck, deleteTodo, changeIsEdit, editTodo, indexNumber }
+  ) => {
+  const [value, setValue] = useState<string>(label);
+  function onClickOrSubmitForm(e: FormEvent): void {
     e.preventDefault();
     editTodo(value, id);
   }
-  const changeCheckbox = useCallback((id) => changeCheck(id), []);
-  const toDeleteTodo = useCallback((id) => deleteTodo(id), []);
-  const classes = useStyles();
-  const isEditTodo = (switchValue) => {
+  const changeCheckbox = useCallback(
+    (id: number): ChangeCheckActionType => changeCheck(id),
+    []
+  );
+  const toDeleteTodo = useCallback(
+    (id: number): DeleteTodoActionType => deleteTodo(id),
+    []
+  );
+  const classes: any = useStyles();
+  const isEditTodo = (switchValue: boolean): JSX.Element => {
     return (
       <form
-        onSubmit={(e) => onClickOrSubmitForm(e)}
+        onSubmit={(e: FormEvent): void => onClickOrSubmitForm(e)}
         className={classes.formField}
       >
         <TextField
           className={classes.rootText}
           value={value}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>): void =>
+            setValue(e.target.value)
+          }
           id="outlined-secondary"
           label="Edit todo"
           variant="outlined"
@@ -64,7 +106,7 @@ const Item = ({ label, checked, id, isEdit, changeCheck, deleteTodo, changeIsEdi
       </form>
     );
   };
-  const noEdit = (switchValue) => {
+  const noEdit = (switchValue: boolean): JSX.Element => {
     return (
       <MUI.Chip
         className={classes.main}
@@ -74,7 +116,7 @@ const Item = ({ label, checked, id, isEdit, changeCheck, deleteTodo, changeIsEdi
       />
     );
   };
-  const editBtn = (switchValue) => {
+  const editBtn = (switchValue: boolean): JSX.Element => {
     return (
       <Fab
         onClick={() => changeIsEdit(id)}
@@ -89,7 +131,7 @@ const Item = ({ label, checked, id, isEdit, changeCheck, deleteTodo, changeIsEdi
   };
   return (
     <MainContext.Consumer>
-      {(switchValue) => {
+      {(switchValue: boolean) => {
         return (
           <>
             <div className={classes.item}>
@@ -117,23 +159,12 @@ const Item = ({ label, checked, id, isEdit, changeCheck, deleteTodo, changeIsEdi
   );
 };
 
-Item.propTypes = {
-  label: PropTypes.string,
-  checked: PropTypes.bool,
-  id: PropTypes.number,
-  isEdit: PropTypes.bool,
-  changeCheck: PropTypes.func,
-  deleteTodo: PropTypes.func,
-  changeIsEdit: PropTypes.func,
-  editTodo: PropTypes.func,
-};
-
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch: Dispatch<any>) => {
   return {
-    changeCheck: (id) => dispatch(changeCheck(id)),
-    deleteTodo: (id) => dispatch(deleteTodo(id)),
-    changeIsEdit: (id) => dispatch(changeIsEdit(id)),
-    editTodo: (label, id) => dispatch(editTodo(label, id)),
+    changeCheck: (id: number): any => dispatch(changeCheck(id)),
+    deleteTodo: (id: number): any => dispatch(deleteTodo(id)),
+    changeIsEdit: (id: number): any => dispatch(changeIsEdit(id)),
+    editTodo: (label: string, id: number): any => dispatch(editTodo(label, id)),
   };
 };
 

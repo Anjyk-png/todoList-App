@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, FC } from "react";
 import * as MUI from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Switch from "@material-ui/core/Switch";
@@ -6,6 +6,8 @@ import Switch from "@material-ui/core/Switch";
 import MainContext from "./context";
 import ItemList from "./components/ItemsList";
 import AddItem from "./components/AddItem";
+
+
 
 const useStyles = makeStyles({
   body: {
@@ -39,9 +41,9 @@ const useStyles = makeStyles({
   },
 });
 
-const App = () => {
-  const [checked, setChecked] = useState(false);
-  const handleChange = () => {
+const App: FC = () => {
+  const [checked, setChecked] = useState<boolean>(false);
+  const handleChange = (): void => {
     setChecked(!checked);
   };
   const classes = useStyles();
