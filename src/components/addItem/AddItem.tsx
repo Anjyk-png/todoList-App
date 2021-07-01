@@ -6,8 +6,8 @@ import TextField from "@material-ui/core/TextField";
 import AddIcon from "@material-ui/icons/Add";
 import Fab from "@material-ui/core/Fab";
 
-import Context from "../../context/index";
-import { addTodo } from "../../actions";
+import Context from "../../context/mainContext";
+import { addTodo } from "../../actions/actions";
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {

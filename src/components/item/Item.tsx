@@ -7,8 +7,8 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import Fab from "@material-ui/core/Fab";
 
-import MainContext from "../../context/index";
-import { changeCheck, deleteTodo, changeIsEdit, editTodo } from "../../actions";
+import MainContext from "../../context/mainContext";
+import { changeCheck, deleteTodo, changeIsEdit, editTodo } from "../../actions/actions";
 
 const useStyles = makeStyles({
   editIcon: {

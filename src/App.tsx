@@ -3,9 +3,9 @@ import * as MUI from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Switch from "@material-ui/core/Switch";
 
-import MainContext from "./context";
-import ItemList from "./components/ItemsList";
-import AddItem from "./components/AddItem";
+import MainContext from "./context/mainContext";
+import ItemList from "./components/ItemsList/ItemList";
+import AddItem from "./components/AddItem/AddItem";
 
 
 
