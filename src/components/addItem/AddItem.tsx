@@ -73,10 +73,4 @@ const AddItem: FunctionComponent = () => {
   );
 };
 
-// const mapDispatchToProps = (dispatch: Dispatch<any>) => {
-//   return {
-//     addTodo: (value: string): any => dispatch(addTodo(value)),
-//   };
-// };
-
 export default AddItem;
