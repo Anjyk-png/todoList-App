@@ -1,5 +1,5 @@
-import React, { useState, useMemo, FC } from "react";
-import { connect } from "react-redux";
+import React, { useState, useMemo, FC, useCallback } from "react";
+import { useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Button from "@material-ui/core/Button";
@@ -37,12 +37,12 @@ interface ITodo {
   isEdit: boolean;
 }
 
-interface ITodos {
-  todos: ITodo[];
-}
+const ItemList: FC = () => {
 
-const ItemList: FC<ITodos> = ({ todos }) => {
+  const todos: any = useSelector( state => state );
+
   const [activeBtn, setBtn] = useState<boolean>(true);
+  const [test, setTest] = useState<boolean>(false);
   const classes: any = useStyles();
   let i: number = 0;
   let newTodos: JSX.Element[] = [];
@@ -56,12 +56,15 @@ const ItemList: FC<ITodos> = ({ todos }) => {
     [todos]
   );
 
+  const onItemClick = useCallback(() => {setTest(!test); }, []);
+
   newTodos = (activeBtn ? checkedTodos : unCheckedTodos).map(
     ({ label, id, checked, isEdit }: ITodo) => {
       i++;
       return (
         <Item
           key={Math.floor(Math.random() * 10000)}
+          onClick={onItemClick}
           indexNumber={i}
           label={label}
           id={id}
@@ -121,10 +124,4 @@ const ItemList: FC<ITodos> = ({ todos }) => {
   );
 };
 
-const mapStateToProps = (state: Array<ITodo>) => {
-  return {
-    todos: state,
-  };
-};
-
-export default connect(mapStateToProps)(ItemList);
+export default ItemList;

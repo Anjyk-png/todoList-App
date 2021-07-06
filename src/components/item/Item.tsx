@@ -1,5 +1,5 @@
-import React, { useCallback, useState, Dispatch, FC, ChangeEvent, FormEvent } from "react";
-import { connect } from "react-redux";
+import React, { memo, useCallback, useState, FC, ChangeEvent, FormEvent } from "react";
+import { useDispatch } from "react-redux";
 import TextField from "@material-ui/core/TextField";
 import * as MUI from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -41,48 +41,45 @@ type DeleteTodoActionType = {
   id: number;
 };
 
-type ChangeIsEditActionType = {
-  type: "CHANGE_IS_EDIT";
-  id: number;
-};
-
-type EditTodoActionType = {
-  type: "EDIT_TODO";
-  label: string;
-  id: number;
-};
-
 type ChangeCheckActionType = {
   type: "CHANGE_CHECK";
   id: number;
 };
 
 interface Iitem {
+  onClick: () => void;
   label: string;
   checked: boolean;
   id: number;
   isEdit: boolean;
   indexNumber: number;
-  changeCheck: (id: number) => ChangeCheckActionType;
-  deleteTodo: (id: number) => DeleteTodoActionType;
-  changeIsEdit: (id: number) => ChangeIsEditActionType;
-  editTodo: (label: string, id: number) => EditTodoActionType;
 }
 
 const Item: FC<Iitem> = (
-    { label, checked, id, isEdit, changeCheck, deleteTodo, changeIsEdit, editTodo, indexNumber }
+    { label, checked, id, isEdit, indexNumber, onClick }
   ) => {
   const [value, setValue] = useState<string>(label);
+  const dispatch = useDispatch();
+
+  const changeCheckFunc = (id: number): any => dispatch(changeCheck(id));
+  const deleteTodoFunc = (id: number): any => dispatch(deleteTodo(id));
+  const changeIsEditFunc = (id: number): any => dispatch(changeIsEdit(id));
+  const editTodoFunc = (label: string, id: number): any => dispatch(editTodo(label, id));
+
   function onClickOrSubmitForm(e: FormEvent): void {
     e.preventDefault();
-    editTodo(value, id);
+    editTodoFunc(value, id);
+    changeIsEditFunc(id);
+    if (isEdit) {
+      editTodoFunc(value, id);
+    }
   }
   const changeCheckbox = useCallback(
-    (id: number): ChangeCheckActionType => changeCheck(id),
+    (id: number): ChangeCheckActionType => changeCheckFunc(id),
     []
   );
   const toDeleteTodo = useCallback(
-    (id: number): DeleteTodoActionType => deleteTodo(id),
+    (id: number): DeleteTodoActionType => deleteTodoFunc(id),
     []
   );
   const classes: any = useStyles();
@@ -95,9 +92,7 @@ const Item: FC<Iitem> = (
         <TextField
           className={classes.rootText}
           value={value}
-          onChange={(e: ChangeEvent<HTMLInputElement>): void =>
-            setValue(e.target.value)
-          }
+          onChange={(e: ChangeEvent<HTMLInputElement>): void => setValue(e.target.value)}
           id="outlined-secondary"
           label="Edit todo"
           variant="outlined"
@@ -119,7 +114,7 @@ const Item: FC<Iitem> = (
   const editBtn = (switchValue: boolean): JSX.Element => {
     return (
       <Fab
-        onClick={() => changeIsEdit(id)}
+        onClick={(e: FormEvent): void => onClickOrSubmitForm(e)}
         size="small"
         className={classes.editIcon}
         style={switchValue ? { color: "black" } : { color: "white" }}
@@ -129,12 +124,13 @@ const Item: FC<Iitem> = (
       </Fab>
     );
   };
+ 
   return (
     <MainContext.Consumer>
       {(switchValue: boolean) => {
         return (
           <>
-            <div className={classes.item}>
+            <div className={classes.item} onClick={onClick}>
               <MUI.Checkbox
                 onClick={() => changeCheckbox(id)}
                 style={switchValue ? { color: "black" } : { color: "white" }}
@@ -159,13 +155,4 @@ const Item: FC<Iitem> = (
   );
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<any>) => {
-  return {
-    changeCheck: (id: number): any => dispatch(changeCheck(id)),
-    deleteTodo: (id: number): any => dispatch(deleteTodo(id)),
-    changeIsEdit: (id: number): any => dispatch(changeIsEdit(id)),
-    editTodo: (label: string, id: number): any => dispatch(editTodo(label, id)),
-  };
-};
-
-export default connect(null, mapDispatchToProps)(Item);
+export default memo(Item);

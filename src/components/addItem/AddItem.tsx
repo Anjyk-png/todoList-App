@@ -1,6 +1,6 @@
-import React,
+import React, 
  { Dispatch, FormEvent, ChangeEvent, MouseEvent, useState, FunctionComponent } from "react";
-import { connect } from "react-redux";
+import { useDispatch } from "react-redux";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import AddIcon from "@material-ui/icons/Add";
@@ -24,21 +24,14 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-type AddTodoActionType = {
-  type: "ADD_TODO";
-  label: string;
-};
-
-type addTodoType = {
-  addTodo: (label: string) => AddTodoActionType;
-};
-
-const AddItem: FunctionComponent<addTodoType> = ({ addTodo }) => {
+const AddItem: FunctionComponent = () => {
+  const dispatch = useDispatch();
+  const addTodoFunc: Dispatch<any> = (value: string): any => dispatch(addTodo(value));
   const [value, setValue] = useState<string>("");
   const classes: any = useStyles();
   function onClickOrSubmitForm(e: MouseEvent | FormEvent): void {
     e.preventDefault();
-    addTodo(value);
+    addTodoFunc(value);
     setValue("");
   }
 
@@ -80,10 +73,10 @@ const AddItem: FunctionComponent<addTodoType> = ({ addTodo }) => {
   );
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<any>) => {
-  return {
-    addTodo: (value: string): any => dispatch(addTodo(value)),
-  };
-};
+// const mapDispatchToProps = (dispatch: Dispatch<any>) => {
+//   return {
+//     addTodo: (value: string): any => dispatch(addTodo(value)),
+//   };
+// };
 
-export default connect(null, mapDispatchToProps)(AddItem);
+export default AddItem;
